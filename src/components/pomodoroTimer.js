@@ -10,12 +10,15 @@ import styled from "styled-components";
 
 const Container = styled.div`
   text-align: center;
-  padding: 2rem;
-  background-color: ${(props) => (props.isBreak ? "#efa7bc" : "#f7797f")};
-  transition: background-color 0.5s ease;
+  padding: 4rem;
+  background-color: ${(props) =>
+    props.isBreak ? "rgba(239, 167, 188, 0.9)" : "rgba(247, 121, 127, 0.9)"};
+  transition: all 0.5s ease;
   border-radius: 15px;
   margin: 2rem auto;
-  max-width: 400px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 `;
 
 const ProgressContainer = styled.div`
@@ -23,6 +26,8 @@ const ProgressContainer = styled.div`
   width: 300px;
   height: 300px;
   margin: 2rem auto;
+  border-radius: 8px;
+  padding: 20px;
 `;
 
 const ProgressCircle = styled.svg`
@@ -134,6 +139,18 @@ const PomodoroTimer = () => {
     });
     setSeconds(0);
   };
+
+  useEffect(() => {
+    // Atualiza o título da aba
+    document.title = `${String(minutes).padStart(2, "0")}:${String(
+      seconds
+    ).padStart(2, "0")} - ${isBreak ? "Break!" : "Focus!"}`;
+
+    // Resetar o título quando o componente desmontar
+    return () => {
+      document.title = "Pomodoro Timer";
+    };
+  }, [minutes, seconds, isBreak]);
 
   return (
     <Container isBreak={isBreak}>
